@@ -1,0 +1,832 @@
+{
+ "workload": "W4-latency",
+ "started": "2026-11-25T17:10:49.092068+00:00",
+ "note": "Measures the path from the machine running the harness to the endpoint. Not a measure of compute performance.",
+ "samples_per_target": 8,
+ "results": {
+  "https://api.openai.com/v1/models": {
+   "summary": {
+    "samples": 8,
+    "ok": 8,
+    "dns_ms_p50": 0.3,
+    "tcp_ms_p50": 10.6,
+    "tls_ms_p50": 21.9,
+    "ttfb_ms_p50": 187.1,
+    "ttfb_ms_p95": 222.8,
+    "status_last": 401,
+    "cert_expires": "Feb  1 04:43:49 2027 GMT"
+   },
+   "samples": [
+    {
+     "ok": true,
+     "dns_ms": 15.8,
+     "tcp_ms": 44.0,
+     "tls_ms": 25.2,
+     "ttfb_ms": 158.3,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  1 04:43:49 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 10.5,
+     "tls_ms": 21.9,
+     "ttfb_ms": 153.4,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  1 04:43:49 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 10.7,
+     "tls_ms": 21.4,
+     "ttfb_ms": 154.3,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  1 04:43:49 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 10.5,
+     "tls_ms": 35.9,
+     "ttfb_ms": 193.7,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  1 04:43:49 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 10.6,
+     "tls_ms": 20.8,
+     "ttfb_ms": 187.1,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  1 04:43:49 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 10.2,
+     "tls_ms": 21.5,
+     "ttfb_ms": 174.4,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  1 04:43:49 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 10.1,
+     "tls_ms": 20.4,
+     "ttfb_ms": 222.8,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  1 04:43:49 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 22.8,
+     "tls_ms": 25.8,
+     "ttfb_ms": 214.4,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  1 04:43:49 2027 GMT",
+     "server": "cloudflare"
+    }
+   ]
+  },
+  "https://api.anthropic.com/v1/models": {
+   "summary": {
+    "samples": 8,
+    "ok": 8,
+    "dns_ms_p50": 0.5,
+    "tcp_ms_p50": 19.3,
+    "tls_ms_p50": 21.2,
+    "ttfb_ms_p50": 172.8,
+    "ttfb_ms_p95": 192.0,
+    "status_last": 401,
+    "cert_expires": "Feb 17 19:49:15 2027 GMT"
+   },
+   "samples": [
+    {
+     "ok": true,
+     "dns_ms": 9.4,
+     "tcp_ms": 20.5,
+     "tls_ms": 21.1,
+     "ttfb_ms": 192.0,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb 17 19:49:15 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.5,
+     "tcp_ms": 9.7,
+     "tls_ms": 21.0,
+     "ttfb_ms": 149.0,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb 17 19:49:15 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 38.0,
+     "tls_ms": 21.0,
+     "ttfb_ms": 169.5,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb 17 19:49:15 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 19.3,
+     "tls_ms": 19.8,
+     "ttfb_ms": 158.2,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb 17 19:49:15 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 9.8,
+     "tls_ms": 22.3,
+     "ttfb_ms": 160.3,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb 17 19:49:15 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.5,
+     "tcp_ms": 10.9,
+     "tls_ms": 21.3,
+     "ttfb_ms": 172.9,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb 17 19:49:15 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 32.2,
+     "tls_ms": 22.6,
+     "ttfb_ms": 172.8,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb 17 19:49:15 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.6,
+     "tcp_ms": 11.4,
+     "tls_ms": 21.2,
+     "ttfb_ms": 175.4,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb 17 19:49:15 2027 GMT",
+     "server": "cloudflare"
+    }
+   ]
+  },
+  "https://api.runpod.io/graphql": {
+   "summary": {
+    "samples": 8,
+    "ok": 8,
+    "dns_ms_p50": 0.4,
+    "tcp_ms_p50": 20.2,
+    "tls_ms_p50": 25.4,
+    "ttfb_ms_p50": 147.2,
+    "ttfb_ms_p95": 171.5,
+    "status_last": 400,
+    "cert_expires": "Dec 27 06:16:53 2026 GMT"
+   },
+   "samples": [
+    {
+     "ok": true,
+     "dns_ms": 10.8,
+     "tcp_ms": 20.2,
+     "tls_ms": 23.4,
+     "ttfb_ms": 147.2,
+     "status": 400,
+     "bytes": 0,
+     "cert_expires": "Dec 27 06:16:53 2026 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 10.4,
+     "tls_ms": 26.5,
+     "ttfb_ms": 143.0,
+     "status": 400,
+     "bytes": 0,
+     "cert_expires": "Dec 27 06:16:53 2026 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 10.4,
+     "tls_ms": 23.3,
+     "ttfb_ms": 171.5,
+     "status": 400,
+     "bytes": 0,
+     "cert_expires": "Dec 27 06:16:53 2026 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 27.8,
+     "tls_ms": 20.2,
+     "ttfb_ms": 146.6,
+     "status": 400,
+     "bytes": 0,
+     "cert_expires": "Dec 27 06:16:53 2026 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 29.8,
+     "tls_ms": 25.4,
+     "ttfb_ms": 137.8,
+     "status": 400,
+     "bytes": 0,
+     "cert_expires": "Dec 27 06:16:53 2026 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.5,
+     "tcp_ms": 10.3,
+     "tls_ms": 27.8,
+     "ttfb_ms": 137.7,
+     "status": 400,
+     "bytes": 0,
+     "cert_expires": "Dec 27 06:16:53 2026 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 21.3,
+     "tls_ms": 28.0,
+     "ttfb_ms": 160.7,
+     "status": 400,
+     "bytes": 0,
+     "cert_expires": "Dec 27 06:16:53 2026 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.5,
+     "tcp_ms": 10.8,
+     "tls_ms": 22.1,
+     "ttfb_ms": 153.7,
+     "status": 400,
+     "bytes": 0,
+     "cert_expires": "Dec 27 06:16:53 2026 GMT",
+     "server": "cloudflare"
+    }
+   ]
+  },
+  "https://api.digitalocean.com/v2/regions": {
+   "summary": {
+    "samples": 8,
+    "ok": 8,
+    "dns_ms_p50": 0.4,
+    "tcp_ms_p50": 10.7,
+    "tls_ms_p50": 25.4,
+    "ttfb_ms_p50": 183.6,
+    "ttfb_ms_p95": 235.1,
+    "status_last": 401,
+    "cert_expires": "Feb  7 05:39:57 2027 GMT"
+   },
+   "samples": [
+    {
+     "ok": true,
+     "dns_ms": 85.2,
+     "tcp_ms": 52.2,
+     "tls_ms": 38.9,
+     "ttfb_ms": 235.1,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  7 05:39:57 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 11.2,
+     "tls_ms": 25.4,
+     "ttfb_ms": 172.8,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  7 05:39:57 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 10.7,
+     "tls_ms": 23.8,
+     "ttfb_ms": 176.4,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  7 05:39:57 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 2.7,
+     "tcp_ms": 10.4,
+     "tls_ms": 22.5,
+     "ttfb_ms": 155.0,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  7 05:39:57 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 10.6,
+     "tls_ms": 24.2,
+     "ttfb_ms": 225.5,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  7 05:39:57 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 11.1,
+     "tls_ms": 25.8,
+     "ttfb_ms": 183.6,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  7 05:39:57 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 10.0,
+     "tls_ms": 26.9,
+     "ttfb_ms": 173.2,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  7 05:39:57 2027 GMT",
+     "server": "cloudflare"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 9.8,
+     "tls_ms": 22.9,
+     "ttfb_ms": 192.2,
+     "status": 401,
+     "bytes": 0,
+     "cert_expires": "Feb  7 05:39:57 2027 GMT",
+     "server": "cloudflare"
+    }
+   ]
+  },
+  "https://api.railway.app/graphql": {
+   "summary": {
+    "samples": 8,
+    "ok": 8,
+    "dns_ms_p50": 0.4,
+    "tcp_ms_p50": 11.2,
+    "tls_ms_p50": 43.0,
+    "ttfb_ms_p50": 199.5,
+    "ttfb_ms_p95": 202.6,
+    "status_last": 404,
+    "cert_expires": "Feb  8 20:55:30 2027 GMT"
+   },
+   "samples": [
+    {
+     "ok": true,
+     "dns_ms": 13.8,
+     "tcp_ms": 20.5,
+     "tls_ms": 43.6,
+     "ttfb_ms": 195.6,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  8 20:55:30 2027 GMT",
+     "server": ""
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 10.5,
+     "tls_ms": 42.7,
+     "ttfb_ms": 199.5,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  8 20:55:30 2027 GMT",
+     "server": ""
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 11.7,
+     "tls_ms": 44.1,
+     "ttfb_ms": 196.2,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  8 20:55:30 2027 GMT",
+     "server": ""
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 10.2,
+     "tls_ms": 42.5,
+     "ttfb_ms": 202.1,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  8 20:55:30 2027 GMT",
+     "server": ""
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 11.2,
+     "tls_ms": 42.1,
+     "ttfb_ms": 200.5,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  8 20:55:30 2027 GMT",
+     "server": ""
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 10.5,
+     "tls_ms": 41.4,
+     "ttfb_ms": 202.6,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  8 20:55:30 2027 GMT",
+     "server": ""
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 10.4,
+     "tls_ms": 43.0,
+     "ttfb_ms": 197.2,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  8 20:55:30 2027 GMT",
+     "server": ""
+    },
+    {
+     "ok": true,
+     "dns_ms": 1.2,
+     "tcp_ms": 11.4,
+     "tls_ms": 50.9,
+     "ttfb_ms": 196.5,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  8 20:55:30 2027 GMT",
+     "server": ""
+    }
+   ]
+  },
+  "https://api.fly.io/v1/apps": {
+   "summary": {
+    "samples": 8,
+    "ok": 8,
+    "dns_ms_p50": 0.4,
+    "tcp_ms_p50": 56.8,
+    "tls_ms_p50": 56.9,
+    "ttfb_ms_p50": 252.1,
+    "ttfb_ms_p95": 271.5,
+    "status_last": 404,
+    "cert_expires": "Feb  7 11:42:21 2027 GMT"
+   },
+   "samples": [
+    {
+     "ok": true,
+     "dns_ms": 13.6,
+     "tcp_ms": 125.1,
+     "tls_ms": 56.9,
+     "ttfb_ms": 252.8,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  7 11:42:21 2027 GMT",
+     "server": "Fly/9bb2ac9a88 (2026-11-23)"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 60.8,
+     "tls_ms": 57.2,
+     "ttfb_ms": 271.4,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  7 11:42:21 2027 GMT",
+     "server": "Fly/9bb2ac9a88 (2026-11-23)"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 45.1,
+     "tls_ms": 62.2,
+     "ttfb_ms": 243.4,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  7 11:42:21 2027 GMT",
+     "server": "Fly/9bb2ac9a88 (2026-11-23)"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 44.4,
+     "tls_ms": 56.9,
+     "ttfb_ms": 252.1,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  7 11:42:21 2027 GMT",
+     "server": "Fly/9bb2ac9a88 (2026-11-23)"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 45.4,
+     "tls_ms": 55.7,
+     "ttfb_ms": 235.4,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  7 11:42:21 2027 GMT",
+     "server": "Fly/9bb2ac9a88 (2026-11-23)"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 44.6,
+     "tls_ms": 55.8,
+     "ttfb_ms": 271.5,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  7 11:42:21 2027 GMT",
+     "server": "Fly/9bb2ac9a88 (2026-11-23)"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 67.7,
+     "tls_ms": 55.6,
+     "ttfb_ms": 236.5,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  7 11:42:21 2027 GMT",
+     "server": "Fly/9bb2ac9a88 (2026-11-23)"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 56.8,
+     "tls_ms": 55.5,
+     "ttfb_ms": 237.5,
+     "status": 404,
+     "bytes": 0,
+     "cert_expires": "Feb  7 11:42:21 2027 GMT",
+     "server": "Fly/9bb2ac9a88 (2026-11-23)"
+    }
+   ]
+  },
+  "https://generativelanguage.googleapis.com/v1beta/models": {
+   "summary": {
+    "samples": 8,
+    "ok": 8,
+    "dns_ms_p50": 0.4,
+    "tcp_ms_p50": 12.7,
+    "tls_ms_p50": 42.1,
+    "ttfb_ms_p50": 99.1,
+    "ttfb_ms_p95": 224.1,
+    "status_last": 403,
+    "cert_expires": "Jan 26 08:28:39 2027 GMT"
+   },
+   "samples": [
+    {
+     "ok": true,
+     "dns_ms": 9.5,
+     "tcp_ms": 39.8,
+     "tls_ms": 44.3,
+     "ttfb_ms": 87.4,
+     "status": 403,
+     "bytes": 0,
+     "cert_expires": "Jan 26 08:28:39 2027 GMT",
+     "server": "scaffolding on HTTPServer2"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 29.0,
+     "tls_ms": 38.1,
+     "ttfb_ms": 83.2,
+     "status": 403,
+     "bytes": 0,
+     "cert_expires": "Jan 26 08:28:39 2027 GMT",
+     "server": "scaffolding on HTTPServer2"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 12.1,
+     "tls_ms": 40.6,
+     "ttfb_ms": 85.9,
+     "status": 403,
+     "bytes": 0,
+     "cert_expires": "Jan 26 08:28:39 2027 GMT",
+     "server": "scaffolding on HTTPServer2"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 30.8,
+     "tls_ms": 39.6,
+     "ttfb_ms": 84.3,
+     "status": 403,
+     "bytes": 0,
+     "cert_expires": "Jan 26 08:28:39 2027 GMT",
+     "server": "scaffolding on HTTPServer2"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 10.1,
+     "tls_ms": 42.1,
+     "ttfb_ms": 99.1,
+     "status": 403,
+     "bytes": 0,
+     "cert_expires": "Jan 26 08:28:39 2027 GMT",
+     "server": "scaffolding on HTTPServer2"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 10.6,
+     "tls_ms": 43.6,
+     "ttfb_ms": 130.1,
+     "status": 403,
+     "bytes": 0,
+     "cert_expires": "Jan 26 08:28:39 2027 GMT",
+     "server": "scaffolding on HTTPServer2"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 12.7,
+     "tls_ms": 46.1,
+     "ttfb_ms": 110.4,
+     "status": 403,
+     "bytes": 0,
+     "cert_expires": "Jan 26 08:28:39 2027 GMT",
+     "server": "scaffolding on HTTPServer2"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 11.5,
+     "tls_ms": 39.6,
+     "ttfb_ms": 224.1,
+     "status": 403,
+     "bytes": 0,
+     "cert_expires": "Jan 26 08:28:39 2027 GMT",
+     "server": "scaffolding on HTTPServer2"
+    }
+   ]
+  },
+  "https://api.deepinfra.com/v1/models": {
+   "summary": {
+    "samples": 8,
+    "ok": 8,
+    "dns_ms_p50": 0.4,
+    "tcp_ms_p50": 151.2,
+    "tls_ms_p50": 161.5,
+    "ttfb_ms_p50": 609.8,
+    "ttfb_ms_p95": 636.8,
+    "status_last": 200,
+    "cert_expires": "Jan 19 22:20:35 2027 GMT"
+   },
+   "samples": [
+    {
+     "ok": true,
+     "dns_ms": 10.2,
+     "tcp_ms": 162.2,
+     "tls_ms": 162.7,
+     "ttfb_ms": 594.1,
+     "status": 200,
+     "bytes": 121899,
+     "cert_expires": "Jan 19 22:20:35 2027 GMT",
+     "server": "uvicorn"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.7,
+     "tcp_ms": 147.0,
+     "tls_ms": 158.2,
+     "ttfb_ms": 614.7,
+     "status": 200,
+     "bytes": 121899,
+     "cert_expires": "Jan 19 22:20:35 2027 GMT",
+     "server": "uvicorn"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 165.4,
+     "tls_ms": 170.5,
+     "ttfb_ms": 609.2,
+     "status": 200,
+     "bytes": 121899,
+     "cert_expires": "Jan 19 22:20:35 2027 GMT",
+     "server": "uvicorn"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 148.1,
+     "tls_ms": 159.9,
+     "ttfb_ms": 623.1,
+     "status": 200,
+     "bytes": 121899,
+     "cert_expires": "Jan 19 22:20:35 2027 GMT",
+     "server": "uvicorn"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 146.7,
+     "tls_ms": 157.7,
+     "ttfb_ms": 636.8,
+     "status": 200,
+     "bytes": 121899,
+     "cert_expires": "Jan 19 22:20:35 2027 GMT",
+     "server": "uvicorn"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.4,
+     "tcp_ms": 151.9,
+     "tls_ms": 161.5,
+     "ttfb_ms": 580.5,
+     "status": 200,
+     "bytes": 121899,
+     "cert_expires": "Jan 19 22:20:35 2027 GMT",
+     "server": "uvicorn"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 146.5,
+     "tls_ms": 157.9,
+     "ttfb_ms": 601.3,
+     "status": 200,
+     "bytes": 121899,
+     "cert_expires": "Jan 19 22:20:35 2027 GMT",
+     "server": "uvicorn"
+    },
+    {
+     "ok": true,
+     "dns_ms": 0.3,
+     "tcp_ms": 151.2,
+     "tls_ms": 162.1,
+     "ttfb_ms": 609.8,
+     "status": 200,
+     "bytes": 121899,
+     "cert_expires": "Jan 19 22:20:35 2027 GMT",
+     "server": "uvicorn"
+    }
+   ]
+  }
+ }
+}
