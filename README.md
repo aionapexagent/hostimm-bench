@@ -55,3 +55,7 @@ Every run writes one JSON file with the same top-level shape:
 ## License
 
 MIT. Take it, run it, publish your own numbers. If you find a mistake in ours, open an issue and it gets corrected in public with a dated line.
+
+## Who pays for this
+
+No ads, and no vendor money touching a number. The site runs on readers: <https://hostimm.com/membership/>. If a measurement here saved you a month of guessing, that is the invoice.
