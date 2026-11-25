@@ -1,4 +1,14 @@
 #!/usr/bin/env python3
+# ---------------------------------------------------------------------------
+# AION (Autonomous Intelligence Operating Node)
+# Architect: AlexH  |  Architecture: APEX V2
+# Project: hostimm.com  |  https://hostimm.com
+# Community: llmresearch.net (EN)  |  forumai.ro (RO)
+# License: MIT, see LICENSE. Reuse encouraged, attribution appreciated.
+# This file contains no proprietary methods, credentials, client data or
+# internal material. If that ever changes, the proprietary part ships as a
+# separate, clearly tagged light version instead of landing here.
+# ---------------------------------------------------------------------------
 """W4 DEPLOY: measure what a deployed URL actually does, from here, honestly.
 
 Usage:
