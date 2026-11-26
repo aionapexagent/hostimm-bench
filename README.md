@@ -11,7 +11,7 @@ Anyone can rerun these. That is the point: a verdict you cannot reproduce is a p
 
 | ID | Name | What it measures |
 |---|---|---|
-| W1 | serve | time to first token, p50 and p95 output tokens per second, over N fixed requests, against any OpenAI-compatible endpoint |
+| W1 | serve | time to first token, p50 and p95 output tokens per second, over N fixed requests, against any OpenAI-compatible endpoint. Tokens from the usage block, not from stream events |
 | W2 | transcribe | wall time and word error rate on a fixed audio file (faster-whisper local, or a hosted speech API) |
 | W3 | agent | total input and output tokens, wall time, dollars per completed task for a fixed 50-step agent loop |
 | W4 | deploy | minutes to a working URL, TLS validity, and time to first byte over N samples |
@@ -30,6 +30,8 @@ python w4_deploy.py --url https://your-app.example.com --samples 60 --out result
 ```
 
 ## Output
+
+Tokens are counted from the provider's `usage.completion_tokens` when the endpoint reports it (the client sends `stream_options: {include_usage: true}`). Where a provider does not report usage, the harness counts stream events and marks the result `"tokens_mode": "estimated"`. The two are never mixed silently: the output file says which one produced the number, per request and for the run.
 
 Every run writes one JSON file with the same top-level shape:
 

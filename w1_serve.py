@@ -34,6 +34,8 @@ def one_request(base_url, model, key, prompt, max_tokens, timeout):
         "max_tokens": max_tokens,
         "temperature": 0,
         "stream": True,
+        # ask the provider for the real token count in the final chunk
+        "stream_options": {"include_usage": True},
     }).encode()
     req = urllib.request.Request(base_url.rstrip("/") + "/chat/completions", data=body, method="POST")
     req.add_header("Content-Type", "application/json")
@@ -43,7 +45,8 @@ def one_request(base_url, model, key, prompt, max_tokens, timeout):
 
     t0 = time.perf_counter()
     ttft = None
-    tokens = 0
+    tokens_events = 0       # fallback: stream events that carried text
+    tokens_reported = None  # truth: usage.completion_tokens from the provider
     ok = True
     err = ""
     try:
@@ -59,19 +62,26 @@ def one_request(base_url, model, key, prompt, max_tokens, timeout):
                     ev = json.loads(payload)
                 except json.JSONDecodeError:
                     continue
+                usage = ev.get("usage") or {}
+                if usage.get("completion_tokens") is not None:
+                    tokens_reported = int(usage["completion_tokens"])
                 delta = (ev.get("choices") or [{}])[0].get("delta") or {}
                 if delta.get("content"):
                     if ttft is None:
                         ttft = (time.perf_counter() - t0) * 1000
-                    tokens += 1
+                    tokens_events += 1
     except urllib.error.HTTPError as e:
         ok, err = False, "http %s: %s" % (e.code, e.read()[:200].decode("utf-8", "replace"))
     except Exception as e:
         ok, err = False, "%s: %s" % (type(e).__name__, e)
 
     total = time.perf_counter() - t0
+    reported = tokens_reported is not None
+    tokens = tokens_reported if reported else tokens_events
     tps = (tokens / (total - (ttft or 0) / 1000)) if tokens > 1 else 0
     return {"ok": ok, "error": err, "ttft_ms": ttft, "tokens": tokens,
+            "tokens_mode": "reported" if reported else "estimated",
+            "tokens_from_events": tokens_events,
             "total_s": round(total, 3), "tokens_per_second": round(tps, 1)}
 
 
@@ -112,6 +122,7 @@ def main():
     ttfts = [s["ttft_ms"] for s in ok]
     tpss = [s["tokens_per_second"] for s in ok if s["tokens_per_second"]]
     tokens = sum(s["tokens"] for s in ok)
+    reported_n = sum(1 for s in ok if s.get("tokens_mode") == "reported")
     seconds = sum(s["total_s"] for s in ok)
     measured_cost_per_1m = None
     if a.price_per_hour and tpss:
@@ -129,6 +140,8 @@ def main():
             "ttft_ms_p50": pct(ttfts, 50), "ttft_ms_p95": pct(ttfts, 95),
             "tokens_per_second_p50": pct(tpss, 50), "tokens_per_second_p95": pct(tpss, 95),
             "output_tokens_generated": tokens, "wall_seconds": round(seconds, 1),
+            "tokens_mode": "reported" if reported_n == len(ok) else ("estimated" if reported_n == 0 else "mixed"),
+            "tokens_reported_requests": reported_n,
         },
         "cost": {
             "measured_usd_per_1m_output_tokens": measured_cost_per_1m,
