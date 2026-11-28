@@ -1,0 +1,208 @@
+{
+ "name": "01 Basic - Telegram voice note to transcript (Groq)",
+ "nodes": [
+  {
+   "parameters": {
+    "updates": [
+     "message"
+    ],
+    "additionalFields": {}
+   },
+   "id": "0697bfe6-c38e-4920-ad2c-44cc28493ac5",
+   "name": "Telegram: voice or audio",
+   "type": "n8n-nodes-base.telegramTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    -460,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose",
+      "version": 2
+     },
+     "combinator": "and",
+     "conditions": [
+      {
+       "id": "073f160c-a830-47a5-a5bb-77521a9474ec",
+       "operator": {
+        "type": "object",
+        "operation": "exists",
+        "singleValue": true
+       },
+       "leftValue": "={{ $json.message.voice }}",
+       "rightValue": ""
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "ff5233c6-dbdd-49f6-bff8-55bba2d8b7d8",
+   "name": "Is it audio?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    -240,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "resource": "file",
+    "operation": "get",
+    "fileId": "={{ $json.message.voice.file_id || $json.message.audio.file_id }}",
+    "download": true,
+    "additionalFields": {}
+   },
+   "id": "4730e1f1-0275-45bc-b07e-af986be16623",
+   "name": "Get Telegram file path",
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    -20,
+    200
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/audio/transcriptions",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "sendBody": true,
+    "contentType": "multipart-form-data",
+    "bodyParameters": {
+     "parameters": [
+      {
+       "parameterType": "formBinaryData",
+       "name": "file",
+       "inputDataFieldName": "data"
+      },
+      {
+       "name": "model",
+       "value": "whisper-large-v3-turbo"
+      },
+      {
+       "name": "response_format",
+       "value": "json"
+      }
+     ]
+    },
+    "options": {
+     "timeout": 120000
+    }
+   },
+   "id": "a100eb0a-84ca-4dec-9379-bdf907ee7d60",
+   "name": "Groq: transcribe (turbo)",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    200,
+    200
+   ]
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $('Telegram: voice or audio').item.json.message.chat.id }}",
+    "text": "={{ $json.text }}",
+    "additionalFields": {
+     "appendAttribution": false
+    }
+   },
+   "id": "85639478-617b-47b5-808b-5bc11935e569",
+   "name": "Reply with transcript",
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    420,
+    200
+   ]
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $('Telegram: voice or audio').item.json.message.chat.id }}",
+    "text": "Send a voice note or an audio file.",
+    "additionalFields": {
+     "appendAttribution": false
+    }
+   },
+   "id": "b1d19580-3f3f-4f08-a09f-f053619311a1",
+   "name": "Not audio: one line back",
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    -20,
+    420
+   ]
+  }
+ ],
+ "connections": {
+  "Telegram: voice or audio": {
+   "main": [
+    [
+     {
+      "node": "Is it audio?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Is it audio?": {
+   "main": [
+    [
+     {
+      "node": "Get Telegram file path",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Not audio: one line back",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Get Telegram file path": {
+   "main": [
+    [
+     {
+      "node": "Groq: transcribe (turbo)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Groq: transcribe (turbo)": {
+   "main": [
+    [
+     {
+      "node": "Reply with transcript",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "active": false,
+ "pinData": {},
+ "versionId": "094583d2-45ad-4b3c-b1bc-9542b7039ef4",
+ "meta": {
+  "templateCredsSetupCompleted": false
+ },
+ "tags": []
+}

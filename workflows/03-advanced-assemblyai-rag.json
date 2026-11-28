@@ -1,0 +1,587 @@
+{
+ "name": "03 Advanced - recording to searchable transcript archive",
+ "nodes": [
+  {
+   "parameters": {
+    "formTitle": "Send a recording",
+    "formDescription": "Upload one audio file. You get a transcript, a summary and a chat over it.",
+    "formFields": {
+     "values": [
+      {
+       "fieldType": "file",
+       "fieldLabel": "recording",
+       "requiredField": true
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "040d47e3-2e84-40d4-a529-ca3a31149253",
+   "name": "Form: upload recording",
+   "type": "n8n-nodes-base.formTrigger",
+   "typeVersion": 2.2,
+   "position": [
+    -780,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.assemblyai.com/v2/upload",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "sendBody": true,
+    "contentType": "binaryData",
+    "inputDataFieldName": "recording",
+    "options": {
+     "timeout": 300000
+    }
+   },
+   "id": "4a2c12e8-9626-43e0-844f-793cb9e2c060",
+   "name": "AssemblyAI: upload audio",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    -560,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.assemblyai.com/v2/transcript",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "{\"audio_url\": \"={{ $json.upload_url }}\", \"speech_models\": [\"assemblyai-stt-3-7\"], \"speaker_labels\": true, \"speech_understanding\": {\"request\": {\"summarization\": {\"summary_type\": \"paragraph\"}}}}",
+    "options": {}
+   },
+   "id": "9e6f73cb-a143-4171-8101-2a06a4f624a5",
+   "name": "AssemblyAI: request transcript",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    -340,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "amount": 20,
+    "unit": "seconds"
+   },
+   "id": "9cbc93e1-ac08-4b61-a208-462e89104231",
+   "name": "Wait 20s",
+   "type": "n8n-nodes-base.wait",
+   "typeVersion": 1.1,
+   "position": [
+    -120,
+    300
+   ],
+   "webhookId": "8abbf613-8e60-48d9-91b8-4a9a1c1aab03"
+  },
+  {
+   "parameters": {
+    "method": "GET",
+    "url": "={{ 'https://api.assemblyai.com/v2/transcript/' + $('AssemblyAI: request transcript').first().json.id }}",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "options": {}
+   },
+   "id": "40ae309f-f73e-4414-8678-ed7137c4b5b7",
+   "name": "AssemblyAI: poll",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    100,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose",
+      "version": 2
+     },
+     "combinator": "and",
+     "conditions": [
+      {
+       "id": "ee8f5e12-30c1-41f1-b61f-424565ea7c75",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       },
+       "leftValue": "={{ $json.status }}",
+       "rightValue": "processing"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "83e69cbb-1a98-43d5-99fc-fd1bd33f760b",
+   "name": "Still processing?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    320,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "assignments": {
+     "assignments": [
+      {
+       "id": "6d6b239a-a0cd-4899-bdfd-05a19bd8f290",
+       "name": "text",
+       "type": "string",
+       "value": "={{ $json.text }}"
+      },
+      {
+       "id": "c9a54b5f-13bf-4e1f-a48b-317118e3d27c",
+       "name": "summary",
+       "type": "string",
+       "value": "={{ $json.speech_understanding?.response?.summarization?.summary ? $json.speech_understanding.response.summarization.summary.join(' ') : '' }}"
+      },
+      {
+       "id": "bf703352-5389-4ad9-b0fc-46ec92becce5",
+       "name": "id",
+       "type": "string",
+       "value": "={{ $json.id }}"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "b3b4fd1f-6d49-49d9-bfa7-26161998d4ec",
+   "name": "Transcript to text",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    540,
+    200
+   ]
+  },
+  {
+   "parameters": {
+    "operation": "toText",
+    "sourceProperty": "text",
+    "options": {
+     "fileName": "={{ 'transcript-' + $json.id + '.txt' }}"
+    }
+   },
+   "id": "d3ce68af-18e2-4faa-8119-4d7018b7258f",
+   "name": "Convert to file",
+   "type": "n8n-nodes-base.convertToFile",
+   "typeVersion": 1.1,
+   "position": [
+    760,
+    200
+   ]
+  },
+  {
+   "parameters": {
+    "mode": "insert",
+    "pineconeIndex": {
+     "__rl": true,
+     "mode": "list",
+     "value": "meeting-transcripts",
+     "cachedResultName": "meeting-transcripts"
+    },
+    "options": {}
+   },
+   "id": "a0135e32-53f6-485a-aebb-153f3b1bab6e",
+   "name": "Pinecone: index transcript",
+   "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+   "typeVersion": 1.3,
+   "position": [
+    980,
+    200
+   ]
+  },
+  {
+   "parameters": {
+    "modelName": "models/gemini-embedding-001"
+   },
+   "id": "88274921-cd8d-41cb-b386-a1287adff0ad",
+   "name": "Gemini: embeddings",
+   "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+   "typeVersion": 1,
+   "position": [
+    880,
+    380
+   ]
+  },
+  {
+   "parameters": {
+    "chunkSize": 900,
+    "chunkOverlap": 100,
+    "options": {}
+   },
+   "id": "5e0250ae-2ed1-4d0d-bb53-b7c221ea5e7e",
+   "name": "Split transcript",
+   "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+   "typeVersion": 1,
+   "position": [
+    880,
+    480
+   ]
+  },
+  {
+   "parameters": {
+    "dataType": "binary",
+    "options": {},
+    "textSplittingMode": "custom"
+   },
+   "id": "f78d1fdb-8010-408d-acea-8c6146106713",
+   "name": "Load document",
+   "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+   "typeVersion": 1.1,
+   "position": [
+    880,
+    580
+   ]
+  },
+  {
+   "parameters": {
+    "operation": "append",
+    "documentId": {
+     "__rl": true,
+     "mode": "list",
+     "value": "YOUR_SHEET_ID",
+     "cachedResultName": "Runs"
+    },
+    "sheetName": {
+     "__rl": true,
+     "mode": "list",
+     "value": "gid=0",
+     "cachedResultName": "Sheet1"
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "file": "={{ $('Form: upload recording').first().json.recording[0].filename }}",
+      "status": "indexed"
+     }
+    },
+    "options": {}
+   },
+   "id": "f0efe45b-c841-4bcc-a7af-209873b10cb5",
+   "name": "Sheet: log the run",
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.5,
+   "position": [
+    1200,
+    200
+   ]
+  },
+  {
+   "parameters": {
+    "options": {}
+   },
+   "id": "df011acb-ff53-479f-a125-6869bda02b9f",
+   "name": "Chat: ask the archive",
+   "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    -780,
+    700
+   ],
+   "webhookId": "9b4b190c-6b2f-434b-a1d7-187f6ede8326"
+  },
+  {
+   "parameters": {
+    "options": {
+     "systemMessage": "Answer from the transcripts you can retrieve. Quote the speaker when it matters. If the archive does not contain it, say so."
+    }
+   },
+   "id": "b239b4fa-107f-4fda-8705-fb747d17bfb1",
+   "name": "Agent",
+   "type": "@n8n/n8n-nodes-langchain.agent",
+   "typeVersion": 1.7,
+   "position": [
+    -560,
+    700
+   ]
+  },
+  {
+   "parameters": {
+    "modelName": "models/gemini-2.5-flash",
+    "options": {}
+   },
+   "id": "b019e7fc-fa7b-4ced-9863-5564e9f7ae0b",
+   "name": "Gemini chat model",
+   "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+   "typeVersion": 1,
+   "position": [
+    -660,
+    900
+   ]
+  },
+  {
+   "parameters": {
+    "sessionIdType": "customKey",
+    "sessionKey": "={{ $('Chat: ask the archive').item.json.sessionId }}",
+    "contextWindowLength": 6
+   },
+   "id": "ec470f6e-a5a4-40f3-b049-562bfac7fe70",
+   "name": "Memory",
+   "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+   "typeVersion": 1.3,
+   "position": [
+    -520,
+    900
+   ]
+  },
+  {
+   "parameters": {
+    "mode": "retrieve-as-tool",
+    "toolName": "meeting_archive",
+    "topK": 5,
+    "pineconeIndex": {
+     "__rl": true,
+     "mode": "list",
+     "value": "meeting-transcripts",
+     "cachedResultName": "meeting-transcripts"
+    },
+    "toolDescription": "Search past meeting transcripts.",
+    "options": {}
+   },
+   "id": "8eb930c0-cb50-460c-9e56-397e98b41884",
+   "name": "Pinecone: retrieve",
+   "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+   "typeVersion": 1.3,
+   "position": [
+    -380,
+    900
+   ]
+  },
+  {
+   "parameters": {
+    "modelName": "models/gemini-embedding-001"
+   },
+   "id": "c14b76d7-c0f0-4802-aa45-1f1aafa2f91a",
+   "name": "Gemini: query embeddings",
+   "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+   "typeVersion": 1,
+   "position": [
+    -380,
+    1080
+   ]
+  }
+ ],
+ "connections": {
+  "Form: upload recording": {
+   "main": [
+    [
+     {
+      "node": "AssemblyAI: upload audio",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "AssemblyAI: upload audio": {
+   "main": [
+    [
+     {
+      "node": "AssemblyAI: request transcript",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "AssemblyAI: request transcript": {
+   "main": [
+    [
+     {
+      "node": "Wait 20s",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Wait 20s": {
+   "main": [
+    [
+     {
+      "node": "AssemblyAI: poll",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "AssemblyAI: poll": {
+   "main": [
+    [
+     {
+      "node": "Still processing?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Still processing?": {
+   "main": [
+    [
+     {
+      "node": "Wait 20s",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Transcript to text",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Transcript to text": {
+   "main": [
+    [
+     {
+      "node": "Convert to file",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Convert to file": {
+   "main": [
+    [
+     {
+      "node": "Pinecone: index transcript",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Pinecone: index transcript": {
+   "main": [
+    [
+     {
+      "node": "Sheet: log the run",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gemini: embeddings": {
+   "ai_embedding": [
+    [
+     {
+      "node": "Pinecone: index transcript",
+      "type": "ai_embedding",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Split transcript": {
+   "ai_textSplitter": [
+    [
+     {
+      "node": "Load document",
+      "type": "ai_textSplitter",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Load document": {
+   "ai_document": [
+    [
+     {
+      "node": "Pinecone: index transcript",
+      "type": "ai_document",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Chat: ask the archive": {
+   "main": [
+    [
+     {
+      "node": "Agent",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gemini chat model": {
+   "ai_languageModel": [
+    [
+     {
+      "node": "Agent",
+      "type": "ai_languageModel",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Memory": {
+   "ai_memory": [
+    [
+     {
+      "node": "Agent",
+      "type": "ai_memory",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Pinecone: retrieve": {
+   "ai_tool": [
+    [
+     {
+      "node": "Agent",
+      "type": "ai_tool",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gemini: query embeddings": {
+   "ai_embedding": [
+    [
+     {
+      "node": "Pinecone: retrieve",
+      "type": "ai_embedding",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "active": false,
+ "pinData": {},
+ "versionId": "9aae2a8b-ac7f-494a-ade5-70feaba27f7c",
+ "meta": {
+  "templateCredsSetupCompleted": false
+ },
+ "tags": []
+}

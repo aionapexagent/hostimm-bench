@@ -1,0 +1,62 @@
+{
+ "assumptions": {
+  "meeting_min": 45.0,
+  "words_per_min": 150,
+  "words": 6750.0,
+  "tokens_per_word": 1.34,
+  "transcript_tokens": 9045,
+  "system_prompt_tokens": 3115,
+  "gpt5_output_tokens_assumed": 1200,
+  "chunks_estimate": 51,
+  "chat_input_tokens": 3461
+ },
+ "prices_usd": {
+  "n8n_starter_exec": 0.008765595912602626,
+  "n8n_pro_exec": 0.005478497445376641,
+  "groq_v3_hr": 0.111,
+  "groq_turbo_hr": 0.04,
+  "openai_whisper1_min": 0.006,
+  "openai_gpt_transcribe_min": 0.0045,
+  "aai_stt37_hr": 0.21,
+  "aai_univ2_hr": 0.15,
+  "aai_diar_hr": 0.02,
+  "aai_sum_low_hr": 0.02,
+  "aai_sum_med_hr": 0.07,
+  "gemini_embed_M": 0.15,
+  "gemini_flash_in_M": 0.3,
+  "gemini_flash_out_M": 2.5,
+  "gpt5_in_M": 1.25,
+  "gpt5_out_M": 10.0,
+  "gpt56sol_in_M": 4.0,
+  "gpt56sol_out_M": 20.0,
+  "gpt56terra_in_M": 2.0,
+  "gpt56terra_out_M": 12.0
+ },
+ "basic_voice_note": {
+  "transcription_10s": 0.000308,
+  "transcription_1min": 0.00185,
+  "n8n_execution": 0.008766,
+  "total_1min": 0.010616
+ },
+ "medium_meeting_minutes": {
+  "transcription_whisper1": 0.27,
+  "transcription_gpt_transcribe": 0.2025,
+  "llm_as_shipped_gpt5": 0.0272,
+  "llm_migrated_gpt56sol": 0.0727,
+  "n8n_execution": 0.008766,
+  "total_as_shipped": 0.306,
+  "total_after_migration": 0.3515,
+  "total_new_transcriber_migrated": 0.284
+ },
+ "advanced_rag": {
+  "transcription": 0.1575,
+  "diarization": 0.015,
+  "summarization_low": 0.015,
+  "embeddings": 0.001592,
+  "chunks": 51,
+  "chat_one_question": 0.001663,
+  "n8n_execution": 0.008766,
+  "total_upload_and_index": 0.1979,
+  "total_with_one_chat": 0.1995
+ }
+}

@@ -1,0 +1,252 @@
+{
+ "name": "02 Medium - Drive recording to meeting minutes",
+ "nodes": [
+  {
+   "parameters": {
+    "event": "fileCreated",
+    "triggerOn": "specificFolder",
+    "folderToWatch": {
+     "__rl": true,
+     "mode": "list",
+     "value": "YOUR_FOLDER_ID",
+     "cachedResultName": "Recordings"
+    },
+    "options": {},
+    "pollTimes": {
+     "item": [
+      {
+       "mode": "everyHour"
+      }
+     ]
+    }
+   },
+   "id": "a2f075f2-24ef-4dbc-960f-81955c8c5113",
+   "name": "Drive: new file in Recordings",
+   "type": "n8n-nodes-base.googleDriveTrigger",
+   "typeVersion": 1,
+   "position": [
+    -560,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "operation": "download",
+    "fileId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "={{ $json.id }}"
+    },
+    "options": {
+     "binaryPropertyName": "data",
+     "fileName": "={{ $json.name }}"
+    }
+   },
+   "id": "ff703256-67c7-4cbb-8105-e1b116de07c6",
+   "name": "Drive: download audio",
+   "type": "n8n-nodes-base.googleDrive",
+   "typeVersion": 3,
+   "position": [
+    -340,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/audio/transcriptions",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "sendBody": true,
+    "contentType": "multipart-form-data",
+    "bodyParameters": {
+     "parameters": [
+      {
+       "parameterType": "formBinaryData",
+       "name": "file",
+       "inputDataFieldName": "data"
+      },
+      {
+       "name": "model",
+       "value": "gpt-transcribe"
+      },
+      {
+       "name": "response_format",
+       "value": "json"
+      }
+     ]
+    },
+    "options": {
+     "timeout": 600000
+    }
+   },
+   "id": "bc387f68-56b3-4052-ab67-775295c4b98a",
+   "name": "OpenAI: transcribe (gpt-transcribe)",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    -120,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/chat/completions",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "{\"model\": \"gpt-5.6-sol\", \"reasoning\": {\"effort\": \"low\"}, \"messages\": [{\"role\": \"system\", \"content\": \"You are a meeting minutes writer. You get one transcript of a meeting.\\\\nReturn JSON only, with these keys: title, date_hint, attendees (array of names as spoken), decisions (array), action_items (array of objects with owner and task and due_if_stated), open_questions (array), summary (max 120 words).\\\\nRules: do not invent names, owners or dates. If an action has no owner in the text, write null. Keep every decision verbatim where the wording matters. Write in the language of the transcript.\"}, {\"role\": \"user\", \"content\": \"={{ $json.text }}\"}]}",
+    "options": {
+     "timeout": 600000
+    }
+   },
+   "id": "f1d55f52-f01e-41a7-91ed-7cca6a6dd6d5",
+   "name": "Write the minutes",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    100,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const r = $input.first().json;\nconst md = r.choices[0].message.content;\nreturn [{ json: { md, name: ($('Drive: new file in Recordings').first().json.name || 'meeting').replace(/\\\\.[^.]+$/, '') + '.md' } }];"
+   },
+   "id": "afe9c0b4-ab61-4cdf-b7c8-0e9c3a249193",
+   "name": "Minutes to markdown file",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    320,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "operation": "toText",
+    "sourceProperty": "md",
+    "options": {
+     "fileName": "={{ $json.name }}"
+    }
+   },
+   "id": "1759d2ca-0f89-4360-a98a-852b0644c8a3",
+   "name": "Convert to file",
+   "type": "n8n-nodes-base.convertToFile",
+   "typeVersion": 1.1,
+   "position": [
+    540,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "operation": "upload",
+    "name": "={{ $('Minutes to markdown file').first().json.name }}",
+    "driveId": {
+     "__rl": true,
+     "mode": "list",
+     "value": "My Drive",
+     "cachedResultName": "My Drive"
+    },
+    "folderId": {
+     "__rl": true,
+     "mode": "list",
+     "value": "YOUR_MINUTES_FOLDER_ID",
+     "cachedResultName": "Minutes"
+    },
+    "options": {}
+   },
+   "id": "56e7e1e1-feab-415a-9337-288ce23756f0",
+   "name": "Drive: upload minutes",
+   "type": "n8n-nodes-base.googleDrive",
+   "typeVersion": 3,
+   "position": [
+    760,
+    300
+   ]
+  }
+ ],
+ "connections": {
+  "Drive: new file in Recordings": {
+   "main": [
+    [
+     {
+      "node": "Drive: download audio",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Drive: download audio": {
+   "main": [
+    [
+     {
+      "node": "OpenAI: transcribe (gpt-transcribe)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "OpenAI: transcribe (gpt-transcribe)": {
+   "main": [
+    [
+     {
+      "node": "Write the minutes",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Write the minutes": {
+   "main": [
+    [
+     {
+      "node": "Minutes to markdown file",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Minutes to markdown file": {
+   "main": [
+    [
+     {
+      "node": "Convert to file",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Convert to file": {
+   "main": [
+    [
+     {
+      "node": "Drive: upload minutes",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "active": false,
+ "pinData": {},
+ "versionId": "8df1ff99-0756-47b9-9c2d-e2ec0a9a60e9",
+ "meta": {
+  "templateCredsSetupCompleted": false
+ },
+ "tags": []
+}
